@@ -34,8 +34,8 @@
   require(DIR_WS_FUNCTIONS . 'compatibility.php');
 
 // set php_self in the local scope
-  $PHP_SELF = (isset($HTTP_SERVER_VARS['PHP_SELF']) ? $HTTP_SERVER_VARS['PHP_SELF'] : $HTTP_SERVER_VARS['SCRIPT_NAME']);
-
+  $PHP_SELF = (isset($HTTP_SERVER_VARS['SCRIPT_FILENAME']) ? $HTTP_SERVER_VARS['SCRIPT_FILENAME'] : $HTTP_SERVER_VARS['SCRIPT_NAME']);
+  
 // Used in the "Backup Manager" to compress backups
   define('LOCAL_EXE_GZIP', '/usr/bin/gzip');
   define('LOCAL_EXE_GUNZIP', '/usr/bin/gunzip');
@@ -129,11 +129,11 @@
     $languages_id = $lng->language['id'];
   }
 
+  $current_page = basename($PHP_SELF);
+
 // redirect to login page if administrator is not yet logged in
   if (!tep_session_is_registered('admin')) {
     $redirect = false;
-
-    $current_page = basename($PHP_SELF);
 
 // if the first page request is to the login page, set the current page to the index page
 // so the redirection on a successful login is not made to the login page again
@@ -170,7 +170,6 @@
 
 // include the language translations
   require(DIR_WS_LANGUAGES . $language . '.php');
-  $current_page = basename($PHP_SELF);
   if (file_exists(DIR_WS_LANGUAGES . $language . '/' . $current_page)) {
     include(DIR_WS_LANGUAGES . $language . '/' . $current_page);
   }
